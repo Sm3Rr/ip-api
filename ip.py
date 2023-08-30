@@ -1,17 +1,23 @@
-
 import requests
+import socket
 
-url = input("https://example.com : ")
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-}
+def send_request(url, method="GET"):
+    if method == "POST":
+        data = {"key": "value"}  # اطلاعات برای بدنه درخواست POST را تهیه کنید
+        response = requests.post(url, data=data)
+    elif method == "GET":
+        response = requests.get(url)
+    elif method == "SYN":
+        ip = socket.gethostbyname(url)
+        print(" WEBSITE IP ADDRESS : ", ip)
+        return
+    elif method == "UAM":
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}  # یک User-Agent مناسب تهیه کنید
+        response = requests.get(url, headers=headers)
+    
+    print(response.text)  # پاسخ سرور را بررسی کنید
 
-for _ in range(5000):
-    response = requests.get(url, headers=headers)
-    # در اینجا می توانید تنظیمات جانبی دیگر را برای وارد کردن به عنوان پارامتر های دیگر مانند پارامترهای query_string، پارامترهای بدن درخواست یا پارامترهای صحت سنجی اضافه کنید
+url = input(" Enter The Site Url")
+method = input(" Enter Method (POST/GET/SYN/UAM): ")
 
-    # در اینجا می توانید چک کنید که آیا درخواست درست به سرور ارسال شده است
-
-    # در اینجا می توانید با محتوای جواب انجام بدهید
-
-    print(response.status_code)
+send_request(url, method)
