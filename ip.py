@@ -1,31 +1,21 @@
 
-import telegram
-from telegram.ext import Updater, CommandHandler
+import telebot
 
-def start(update, context):
-    # دریافت اطلاعات در صورت استفاده از دستور /start
-    user = update.message.from_user
-    chat_id = update.message.chat_id
+# توکن ربات خود را در اینجا قرار دهید
+TOKEN = '5307073299:AAG2h0nuNRxn3OBA7fhFlLcCA1Bd-DuVTXg'
 
-    # دریافت ایپی کاربر
-    user_ip = update.message.from_user['id']
+# ایجاد یک نمونه از کلاس TeleBot با استفاده از توکن ربات
+bot = telebot.TeleBot(TOKEN)
 
-    # ارسال ایپی کاربر به ادمین
-    admin_chat_id = '1668896742'
-    bot.send_message(chat_id=admin_chat_id, text=f'New user IP: {user_ip}')
+# تعریف یک دستور
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    bot.reply_to(message, "hello wellcome")
 
-def main():
-    # تنظیم توکن ربات تلگرام خود
-    token = '5307073299:AAG2h0nuNRxn3OBA7fhFlLcCA1Bd-DuVTXg'
-    updater = Updater(token, use_context=True)
-    dispatcher = updater.dispatcher
+# تعریف یک پیام عادی
+@bot.message_handler(func=lambda message: True)
+def echo_message(message):
+    bot.reply_to(message, message.text)
 
-    # اضافه کردن handler برای دستور /start
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
-
-    # برقراری ارتباط با سرور تلگرام و استدلال شروع برنامه
-    updater.start_polling()
-
-if __name__ == '__main__':
-    main()
+# راه اندازی ربات و ورود به حالت شنود
+bot.polling()
