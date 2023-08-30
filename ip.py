@@ -1,20 +1,20 @@
 
 import requests
-import threading
 
-URL = input('EnTer The TarGeT Ip : ')
+# URL مورد نظر خود را در اینجا قرار دهید
+url = "http://www.example.com"
 
-def send_requests(method):
-    for _ in range(1000):
-        if method == 'get':
-            response = requests.get(URL)
-        else:
-            response = requests.post(URL)
-            
-        print(response.status_code)
+# User-Agent جعلی که میخواهید برای ریکوئست استفاده شود
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
 
-# ارسال ریکوئست های GET
-threading.Thread(target=send_requests, args=('get',)).start()
+# درخواست GET با نشانه User-Agent جعلی ارسال می شود
+headers = {
+    'User-Agent': user_agent
+}
+response = requests.get(url, headers=headers)
 
-# ارسال ریکوئست های POST
-threading.Thread(target=send_requests, args=('post',)).start()
+# بررسی و چاپ کردن وضعیت درخواست
+if response.status_code == 200:
+    print("درخواست با موفقیت ارسال شد.")
+else:
+    print("ارسال درخواست ناموفق بود.")
